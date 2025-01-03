@@ -13,11 +13,14 @@ export const joinWorkspace = asyncHandler(
     const userId = req.user?._id;
 
     // Call service to add user to workspace
-    const { workspace, role } = await joinWorkspaceByInvite(userId, inviteCode);
+    const { workspaceId, role } = await joinWorkspaceByInvite(
+      userId,
+      inviteCode
+    );
 
     return res.status(HTTPSTATUS.OK).json({
       message: "Successfully joined the workspace",
-      workspace,
+      workspaceId,
       role,
     });
   }

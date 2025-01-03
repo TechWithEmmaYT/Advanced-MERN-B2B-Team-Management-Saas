@@ -1,22 +1,15 @@
-import { Outlet } from "react-router-dom";
-// import { Loader } from "lucide-react";
-// import useAuth from "@/hooks/use-auth";
+import { Navigate, Outlet } from "react-router-dom";
+import useAuth from "@/hooks/api/use-auth";
+import { DashboardSkeleton } from "@/components/skeleton-loaders/dashboard-skeleton";
 
 const ProtectedRoute = () => {
-  //   const { data, isLoading } = useAuth();
-  //   const user = data?.data?.user;
+  const { data, isLoading } = useAuth();
+  const user = data?.user;
 
-  //   if (isLoading) {
-  //     return (
-  //       <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-[rgba(255,255,255,.2)] text-2xl">
-  //         <Loader size="30px" className="animate-spin" />
-  //         Loading TeamSync...
-  //       </div>
-  //     );
-  //   }
-  //user ? <Outlet /> : <Navigate to="/" replace />;
-
-  return <Outlet />;
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+  return user ? <Outlet /> : <Navigate to="/" replace />;
 };
 
 export default ProtectedRoute;

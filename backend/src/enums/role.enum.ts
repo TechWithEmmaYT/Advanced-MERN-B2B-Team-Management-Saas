@@ -2,7 +2,6 @@ export const Roles = {
   OWNER: "OWNER",
   ADMIN: "ADMIN",
   MEMBER: "MEMBER",
-  GUEST: "GUEST",
 } as const;
 
 export type RoleType = keyof typeof Roles; // "OWNER" | "ADMIN" | "MEMBER" | "GUEST"

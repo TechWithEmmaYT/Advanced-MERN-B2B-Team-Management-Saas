@@ -37,6 +37,7 @@ export const getProjectsInWorkspaceService = async (
   const projects = await ProjectModel.find({ workspace: workspaceId })
     .skip(skip)
     .limit(pageSize)
+    .populate("createdBy", "_id name profilePicture -password")
     .sort({ createdAt: -1 });
 
   const totalPages = Math.ceil(totalCount / pageSize);
@@ -52,9 +53,9 @@ export const getProjectByIdService = async (
   const project = await ProjectModel.findOne({
     _id: projectId,
     workspace: workspaceId,
-  })
-    .populate("workspace")
-    .populate("createdBy");
+  }).select("_id emoji name description");
+  // .populate("workspace")
+  // .populate("createdBy");
 
   if (!project) {
     throw new NotFoundException(
@@ -179,6 +180,8 @@ export const deleteProjectService = async (
     );
   }
   await project.deleteOne();
+
+  await TaskModel.deleteMany({ projectId: project._id });
 
   return project;
 };

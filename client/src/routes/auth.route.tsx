@@ -1,22 +1,20 @@
-import { Outlet } from "react-router-dom";
-// import { Loader } from "lucide-react";
-// import useAuth from "@/hooks/use-auth";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import useAuth from "@/hooks/api/use-auth";
+import { DashboardSkeleton } from "@/components/skeleton-loaders/dashboard-skeleton";
+import { isAuthRoute } from "./common/routePaths";
 
 const AuthRoute = () => {
-  //   const { data, isLoading } = useAuth();
-  //   const user = data?.data?.user;
+  const location = useLocation();
+  const { data: authData, isLoading } = useAuth();
+  const user = authData?.user;
 
-  //   if (isLoading) {
-  //     return (
-  //       <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-[rgba(255,255,255,.2)] text-2xl">
-  //         <Loader size="30px" className="animate-spin" />
-  //         Loading TeamSync...
-  //       </div>
-  //     );
-  //   }
-  //user ? <Outlet /> : <Navigate to="/" replace />;
+  const isLoginRoute = isAuthRoute(location.pathname);
 
-  return <Outlet />;
+  if (isLoading && !isLoginRoute) return <DashboardSkeleton />;
+
+  if (!user) return <Outlet />;
+
+  return <Navigate to={`/workspace/${user?.currentWorkspace?._id}`} replace />;
 };
 
 export default AuthRoute;

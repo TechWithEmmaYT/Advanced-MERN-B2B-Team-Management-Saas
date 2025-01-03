@@ -18,12 +18,10 @@ export const RolePermissions: Record<
     Permissions.CREATE_TASK,
     Permissions.EDIT_TASK,
     Permissions.DELETE_TASK,
-    Permissions.VIEW_ONLY, // Owner has all permissions, including view
+    Permissions.VIEW_ONLY,
   ],
   ADMIN: [
     Permissions.ADD_MEMBER,
-    Permissions.CHANGE_MEMBER_ROLE,
-    Permissions.REMOVE_MEMBER,
     Permissions.CREATE_PROJECT,
     Permissions.EDIT_PROJECT,
     Permissions.DELETE_PROJECT,
@@ -37,8 +35,5 @@ export const RolePermissions: Record<
     Permissions.VIEW_ONLY,
     Permissions.CREATE_TASK,
     Permissions.EDIT_TASK,
-  ],
-  GUEST: [
-    Permissions.VIEW_ONLY, // GUEST only has permission to view workspace
   ],
 };

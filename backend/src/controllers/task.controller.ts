@@ -56,7 +56,9 @@ export const getAllTasks = asyncHandler(async (req: Request, res: Response) => {
     priority: req.query.priority
       ? (req.query.priority as string)?.split(",")
       : undefined,
-    assignedTo: req.query.assignedTo as string | undefined,
+    assignedTo: req.query.assignedTo
+      ? (req.query.assignedTo as string)?.split(",")
+      : undefined,
     keyword: req.query.keyword as string | undefined,
     dueDate: req.query.dueDate as string | undefined,
   };
@@ -67,14 +69,13 @@ export const getAllTasks = asyncHandler(async (req: Request, res: Response) => {
   };
 
   const { role } = await getMemberRoleInWorkspace(userId, workspaceId);
-
   roleGuard(role, [Permissions.VIEW_ONLY]);
 
   const result = await getAllTasksService(workspaceId, filters, pagination);
 
   return res.status(HTTPSTATUS.OK).json({
     message: "Task fetched successfully",
-    data: { ...result },
+    ...result,
   });
 });
 

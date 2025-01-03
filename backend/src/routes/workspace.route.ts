@@ -6,7 +6,6 @@ import {
   getWorkspaceMembers,
   getWorkspaceById,
   updateWorkspaceById,
-  leaveWorkspace,
   changeWorkspaceMemberRole,
   getWorkspaceAnalytics,
 } from "../controllers/workspace.controller";
@@ -17,7 +16,6 @@ workspaceRoutes.post("/create/new", createWorkspace);
 workspaceRoutes.put("/update/:id", updateWorkspaceById);
 workspaceRoutes.put("/change/member/role/:id", changeWorkspaceMemberRole);
 
-workspaceRoutes.delete("/leave/:id", leaveWorkspace);
 workspaceRoutes.delete("/delete/:id", deleteWorkspaceById);
 
 workspaceRoutes.get("/all", getUserWorkspaces);

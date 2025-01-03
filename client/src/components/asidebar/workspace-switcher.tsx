@@ -1,5 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from "react";
-import { Check, ChevronDown, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { Check, ChevronDown, Loader, Plus } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -17,42 +20,53 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useNavigate } from "react-router-dom";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import useCreateWorkspaceDialog from "@/hooks/use-create-workspace-dialog";
+import { getAllWorkspacesUserIsMemberQueryFn } from "@/lib/api";
 
 type WorkspaceType = {
-  id: string;
+  _id: string;
   name: string;
-  logo: React.ElementType;
-  plan: string;
 };
 
-export function WorkspaceSwitcher({
-  workspaces,
-}: {
-  workspaces: WorkspaceType[];
-}) {
+export function WorkspaceSwitcher() {
   const navigate = useNavigate();
   const { isMobile } = useSidebar();
-
   const { onOpen } = useCreateWorkspaceDialog();
   const workspaceId = useWorkspaceId();
 
-  const [activeWorkspace, setActiveWorkspace] = React.useState(workspaces[0]);
+  const [activeWorkspace, setActiveWorkspace] = React.useState<WorkspaceType>();
+
+  const { data, isPending } = useQuery({
+    queryKey: ["userWorkspaces"],
+    queryFn: getAllWorkspacesUserIsMemberQueryFn,
+    staleTime: 1,
+    refetchOnMount: true,
+  });
+
+  const workspaces = data?.workspaces;
 
   React.useEffect(() => {
-    if (workspaceId) {
+    if (workspaceId && workspaces?.length) {
       const workspace = workspaces.find(
-        (workspace) => workspace.id === workspaceId
+        (workspace) => workspace._id === workspaceId
       );
-      if (workspace) setActiveWorkspace(workspace);
+      if (workspace) {
+        setActiveWorkspace(workspace);
+        return;
+      }
     }
-  }, [workspaceId, workspaces]);
+
+    if (workspaces?.length) {
+      const firstWorkspace = workspaces[0];
+      setActiveWorkspace(firstWorkspace);
+      navigate(`/workspace/${firstWorkspace?._id}`);
+    }
+  }, [workspaceId, workspaces, navigate]);
 
   const onSelect = (workspace: WorkspaceType) => {
     setActiveWorkspace(workspace);
-    navigate(`/workspace/${workspace.id}`);
+    navigate(`/workspace/${workspace._id}`);
   };
 
   return (
@@ -74,17 +88,25 @@ export function WorkspaceSwitcher({
                 size="lg"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground bg-gray-10"
               >
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <activeWorkspace.logo className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">
-                    {activeWorkspace.name}
-                  </span>
-                  <span className="truncate text-xs">
-                    {activeWorkspace.plan}
-                  </span>
-                </div>
+                {activeWorkspace ? (
+                  <>
+                    <div className="flex aspect-square size-8 items-center font-semibold justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                      {activeWorkspace?.name?.split(" ")?.[0]?.charAt(0)}
+                    </div>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold">
+                        {activeWorkspace.name}
+                      </span>
+                      <span className="truncate text-xs">Free</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">
+                      No Workspace selected
+                    </span>
+                  </div>
+                )}
                 <ChevronDown className="ml-auto" />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
@@ -97,18 +119,19 @@ export function WorkspaceSwitcher({
               <DropdownMenuLabel className="text-xs text-muted-foreground">
                 Workspaces
               </DropdownMenuLabel>
-              {workspaces.map((workspace) => (
+              {isPending ? <Loader className=" w-5 h-5 animate-spin" /> : null}
+              {workspaces?.map((workspace) => (
                 <DropdownMenuItem
-                  key={workspace.id}
+                  key={workspace._id}
                   onClick={() => onSelect(workspace)}
                   className="gap-2 p-2 !cursor-pointer"
                 >
                   <div className="flex size-6 items-center justify-center rounded-sm border">
-                    <workspace.logo className="size-4 shrink-0" />
+                    {workspace?.name?.split(" ")?.[0]?.charAt(0)}
                   </div>
                   {workspace.name}
 
-                  {workspace.id === workspaceId && (
+                  {workspace._id === workspaceId && (
                     <DropdownMenuShortcut className="tracking-normal !opacity-100">
                       <Check className="w-4 h-4" />
                     </DropdownMenuShortcut>

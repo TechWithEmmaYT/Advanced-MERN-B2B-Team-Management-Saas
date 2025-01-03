@@ -62,7 +62,7 @@ export const getAllTasksService = async (
     projectId?: string;
     status?: string[];
     priority?: string[];
-    assignedTo?: string;
+    assignedTo?: string[];
     keyword?: string;
     dueDate?: string;
   },
@@ -88,8 +88,8 @@ export const getAllTasksService = async (
     query.priority = { $in: filters.priority };
   }
 
-  if (filters.assignedTo && filters.assignedTo !== "all") {
-    query.assignedTo = filters.assignedTo;
+  if (filters.assignedTo && filters.assignedTo.length > 0) {
+    query.assignedTo = { $in: filters.assignedTo };
   }
   if (filters.keyword && filters.keyword !== undefined) {
     query.title = { $regex: filters.keyword, $options: "i" };
@@ -110,8 +110,8 @@ export const getAllTasksService = async (
       .skip(skip)
       .limit(pageSize)
       .sort({ createdAt: -1 }) // Sort by creation date, newest first
-      .populate("assignedTo", "_id name")
-      .populate("project", "_id name"),
+      .populate("assignedTo", "_id name profilePicture -password")
+      .populate("project", "_id emoji name"),
     TaskModel.countDocuments(query),
   ]);
 

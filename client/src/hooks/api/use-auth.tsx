@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUserSessionQueryFn } from "@/lib/api";
+import { getCurrentUserQueryFn } from "@/lib/api";
 
 const useAuth = () => {
   const query = useQuery({
     queryKey: ["authUser"],
-    queryFn: getUserSessionQueryFn,
-    staleTime: Infinity,
-    //retry: 1,
+    queryFn: getCurrentUserQueryFn,
+    //staleTime: Infinity,
+    staleTime: 0,
+    retry: 5,
   });
   return query;
 };

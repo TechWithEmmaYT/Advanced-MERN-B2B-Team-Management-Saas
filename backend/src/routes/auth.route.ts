@@ -14,7 +14,6 @@ const authRoutes = Router();
 
 authRoutes.post("/register", registerUserController);
 authRoutes.post("/login", loginController);
-authRoutes.post("/logout", logOut);
 
 authRoutes.get(
   "/google",
@@ -30,5 +29,7 @@ authRoutes.get(
   }),
   googleLoginCallback
 );
+
+authRoutes.post("/logout", logOut);
 
 export default authRoutes;

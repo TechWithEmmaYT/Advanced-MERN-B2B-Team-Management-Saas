@@ -14,10 +14,8 @@ export default function Tasks() {
         <CreateTaskDialog />
       </div>
       {/* {Task Table} */}
-      <div className="relative">
-        <div className="w-full max-w-4xl xl:max-w-full">
-          <TaskTable />
-        </div>
+      <div>
+        <TaskTable />
       </div>
     </div>
   );

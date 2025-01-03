@@ -20,7 +20,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const taskId = row.getValue("taskId");
+  const taskId = row.getValue("_id");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

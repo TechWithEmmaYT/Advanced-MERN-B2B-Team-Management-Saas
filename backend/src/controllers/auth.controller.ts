@@ -8,7 +8,17 @@ import passport from "passport";
 
 export const googleLoginCallback = asyncHandler(
   async (req: Request, res: Response) => {
-    return res.redirect(`${config.FRONTEND_ORIGIN}/workspace?status=success`);
+    const currentWorkspace = req.user?.currentWorkspace;
+
+    if (!currentWorkspace) {
+      // If currentWorkspace is missing, handle the error appropriately
+      return res.redirect(
+        `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`
+      );
+    }
+    return res.redirect(
+      `${config.FRONTEND_ORIGIN}/workspace/${currentWorkspace}`
+    );
   }
 );
 
@@ -64,8 +74,12 @@ export const logOut = asyncHandler(async (req: Request, res: Response) => {
   req.logout((err) => {
     if (err) {
       console.error("Logout error:", err);
-      return res.status(500).json({ error: "Failed to log out" });
+      return res
+        .status(HTTPSTATUS.INTERNAL_SERVER_ERROR)
+        .json({ error: "Failed to log out" });
     }
   });
-  return res.redirect(`${config.FRONTEND_ORIGIN}`);
+  req.session = null;
+  return res.status(HTTPSTATUS.OK).json({ message: "Successfully logged out" });
+  //return res.redirect(`${config.FRONTEND_ORIGIN}`);
 });

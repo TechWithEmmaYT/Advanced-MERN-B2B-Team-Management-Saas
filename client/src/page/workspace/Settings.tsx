@@ -1,24 +1,15 @@
-import EditWorkspaceForm from "@/components/forms/edit-workspace-form";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+/* eslint-disable react-refresh/only-export-components */
+import EditWorkspaceForm from "@/components/workspace/settings/edit-workspace-form";
 import { Separator } from "@/components/ui/separator";
 import DeleteWorkspaceCard from "@/components/workspace/settings/delete-workspace-card";
+import WorkspaceHeader from "@/components/workspace/common/workspace-header";
+import withPermission from "@/hoc/with-permission";
+import { Permissions } from "@/constant";
 
 const Settings = () => {
   return (
     <div className="w-full h-auto py-2">
-      <div className="w-full max-w-3xl mx-auto pb-2">
-        <div className="flex items-center gap-4">
-          <Avatar className="size-[60px] rounded-lg font-bold text-[35px] ">
-            <AvatarFallback className="rounded-lg bg-gradient-to-tl to-black  from-black text-white">
-              AI
-            </AvatarFallback>
-          </Avatar>
-          <div className="grid flex-1 text-left leading-tight">
-            <span className="truncate font-semibold text-xl">Acme Inc</span>
-            <span className="truncate text-sm">Free</span>
-          </div>
-        </div>
-      </div>
+      <WorkspaceHeader />
       <Separator className="my-4 " />
       <main>
         <div className="w-full max-w-3xl mx-auto py-3">
@@ -40,4 +31,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default withPermission(Settings, Permissions.MANAGE_WORKSPACE_SETTINGS);

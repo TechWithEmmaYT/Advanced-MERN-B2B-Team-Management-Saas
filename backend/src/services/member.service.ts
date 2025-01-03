@@ -27,8 +27,11 @@ export const getMemberRoleInWorkspace = async (
   return { role: roleName };
 };
 
+// NO NEED FOR THIS
 export const getAllMemberRolesService = async () => {
-  const roles = await RoleModel.find({}, { name: 1, _id: 1, permissions: 1 });
+  const roles = await RoleModel.find({}, { name: 1, _id: 1 }).select(
+    "-permission"
+  );
   return roles;
 };
 
@@ -58,7 +61,6 @@ export const joinWorkspaceByInvite = async (
   if (!role) {
     throw new NotFoundException("Role not found");
   }
-
   // Add user to workspace as a member
   const newMember = new MemberModel({
     userId,
@@ -67,5 +69,5 @@ export const joinWorkspaceByInvite = async (
   });
   await newMember.save();
 
-  return { workspace, role: role.name };
+  return { workspaceId: workspace._id, role: role.name };
 };
