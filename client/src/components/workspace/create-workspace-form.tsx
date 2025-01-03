@@ -97,13 +97,13 @@ export default function CreateWorkspaceForm({
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Taco's Co."
+                        placeholder="Engineering Core"
                         className="!h-[48px]"
                         {...field}
                       />
                     </FormControl>
                     <FormDescription>
-                      This is the name of your company, team or organization.
+                      This is the name of a department in your organization.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

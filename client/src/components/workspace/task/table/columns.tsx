@@ -54,10 +54,10 @@ export const getColumns = (projectId?: string): ColumnDef<TaskType>[] => {
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <Badge variant="outline" className="capitalize">
+            <Badge variant="outline" className="capitalize shrink-0 h-[25px]">
               {row.original.taskCode}
             </Badge>
-            <span className="lg:max-w-[300px] max-w-[200px] truncate font-medium">
+            <span className="block lg:max-w-[220px] max-w-[200px] font-medium">
               {row.original.title}
             </span>
           </div>
@@ -206,7 +206,13 @@ export const getColumns = (projectId?: string): ColumnDef<TaskType>[] => {
     },
     {
       id: "actions",
-      cell: ({ row }) => <DataTableRowActions row={row} />,
+      cell: ({ row }) => {
+        return (
+          <>
+            <DataTableRowActions row={row} />
+          </>
+        );
+      },
     },
   ];
 

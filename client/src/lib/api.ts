@@ -234,19 +234,17 @@ export const getAllTasksQueryFn = async ({
   return response.data;
 };
 
-// export const deletTaskMutationFn = async ({
-//   projectId,
-//   workspaceId,
-//   taskId,
-// }: {
-//   projectId: string;
-//   workspaceId: string;
-//   taskId: string;
-// }): Promise<{
-//   message: string;
-// }> => {
-//   const response = await API.delete(
-//     `task/${taskId}/project/${projectId}/workspace/${workspaceId}/delete`
-//   );
-//   return response.data;
-// };
+export const deleteTaskMutationFn = async ({
+  workspaceId,
+  taskId,
+}: {
+  workspaceId: string;
+  taskId: string;
+}): Promise<{
+  message: string;
+}> => {
+  const response = await API.delete(
+    `task/${taskId}/workspace/${workspaceId}/delete`
+  );
+  return response.data;
+};

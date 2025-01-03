@@ -29,7 +29,7 @@ const EmojiPickerComponent: React.FC<EmojiPickerComponentProps> = ({
           // 'frequent',
           "objects",
           "people",
-          // 'places',
+          "places",
           // 'symbols',
         ]}
         categoryIcons={{

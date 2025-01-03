@@ -29,11 +29,11 @@ const DeleteWorkspaceCard = () => {
       },
       {
         onSuccess: (data) => {
-          queryClient.refetchQueries({
-            queryKey: ["userWorkspaces", workspaceId],
+          queryClient.invalidateQueries({
+            queryKey: ["userWorkspaces"],
           });
           navigate(`/workspace/${data.currentWorkspace}`);
-          setTimeout(() => onCloseDialog(), 500);
+          setTimeout(() => onCloseDialog(), 100);
         },
         onError: (error) => {
           console.log(error);

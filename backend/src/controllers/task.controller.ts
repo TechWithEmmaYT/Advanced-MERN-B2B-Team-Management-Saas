@@ -138,7 +138,6 @@ export const deleteTask = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user?._id;
 
   const taskId = taskIdSchema.parse(req.params.id);
-  const projectId = projectIdSchema.parse(req.params.projectId);
   const workspaceId = workspaceIdSchema.parse(req.params.workspaceId);
 
   const { role } = await getMemberRoleInWorkspace(userId, workspaceId);
@@ -146,7 +145,7 @@ export const deleteTask = asyncHandler(async (req: Request, res: Response) => {
   // Ensure the user has the required permissions
   roleGuard(role, [Permissions.DELETE_TASK]);
 
-  await deleteTaskService(taskId, projectId, workspaceId);
+  await deleteTaskService(taskId, workspaceId);
 
   return res.status(HTTPSTATUS.OK).json({
     message: "Task deleted successfully",

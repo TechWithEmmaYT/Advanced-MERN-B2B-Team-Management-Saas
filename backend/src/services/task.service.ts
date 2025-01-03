@@ -42,7 +42,7 @@ export const createTaskService = async (
   const task = new TaskModel({
     title,
     description,
-    priority: priority || TaskPriorityEnum.MEDIUM, // Default to 'MEDIUM' priority if not provided
+    priority: priority || TaskPriorityEnum.MEDIUM,
     status: status || TaskStatusEnum.TODO,
     assignedTo,
     createdBy: userId,
@@ -205,28 +205,18 @@ export const updateTaskService = async (
 
 export const deleteTaskService = async (
   taskId: string,
-  projectId: string,
   workspaceId: string
 ) => {
-  const project = await ProjectModel.findById(projectId);
-  if (!project || project.workspace.toString() !== workspaceId.toString()) {
+  const task = await TaskModel.findOneAndDelete({
+    _id: taskId,
+    workspace: workspaceId,
+  });
+
+  // If no task is found, throw an error
+  if (!task) {
     throw new NotFoundException(
-      "Project not found or does not belong to this workspace"
+      "Task not found or does not belong to the specified workspace"
     );
   }
-
-  const task = await TaskModel.findById(taskId);
-  if (
-    !task ||
-    task.project.toString() !== projectId.toString() ||
-    task.workspace.toString() !== workspaceId.toString()
-  ) {
-    throw new NotFoundException(
-      "Task not found or does not belong to the specified workspace or project"
-    );
-  }
-
-  await task.deleteOne();
-
-  return task;
+  return;
 };

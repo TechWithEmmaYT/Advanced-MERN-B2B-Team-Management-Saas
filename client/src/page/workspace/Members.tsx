@@ -15,8 +15,8 @@ export default function Members() {
               Workspace members
             </h2>
             <p className="text-sm text-muted-foreground">
-              Workspace members can view and join all Workspace visible boards
-              and create new boards in the Workspace.
+              Workspace members can view and join all Workspace project, tasks
+              and create new task in the Workspace.
             </p>
           </div>
           <Separator className="my-4" />

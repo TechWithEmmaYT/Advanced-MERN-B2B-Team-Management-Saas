@@ -7,7 +7,7 @@ const useAuth = () => {
     queryFn: getCurrentUserQueryFn,
     //staleTime: Infinity,
     staleTime: 0,
-    retry: 5,
+    retry: 2,
   });
   return query;
 };

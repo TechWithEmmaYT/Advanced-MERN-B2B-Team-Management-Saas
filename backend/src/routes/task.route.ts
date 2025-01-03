@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createTask,
+  deleteTask,
   getAllTasks,
   getTaskById,
   getTaskEnums,
@@ -8,6 +9,12 @@ import {
 } from "../controllers/task.controller";
 
 const taskRoutes = Router();
+
+taskRoutes.get("/workspace/:workspaceId/all", getAllTasks);
+//Not Needed
+taskRoutes.get("/enums", getTaskEnums);
+
+taskRoutes.get("/:id/project/:projectId/workspace/:workspaceId", getTaskById);
 
 taskRoutes.post(
   "/project/:projectId/workspace/:workspaceId/create",
@@ -18,12 +25,6 @@ taskRoutes.put(
   updateTask
 );
 
-taskRoutes.delete("/:id/project/:projectId/workspace/:workspaceId/delete");
-
-taskRoutes.get("/enums", getTaskEnums);
-
-taskRoutes.get("/workspace/:workspaceId/all", getAllTasks);
-
-taskRoutes.get("/:id/project/:projectId/workspace/:workspaceId", getTaskById);
+taskRoutes.delete("/:id/workspace/:workspaceId/delete", deleteTask);
 
 export default taskRoutes;
